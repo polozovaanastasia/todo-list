@@ -13,14 +13,21 @@ type propsType = {
     removeTask: (id: string) => void;
     addTask: (title: string) => void;
     changeFilter: (value: filterValuesType) => void;
-    changeTaskIsDone: (id: string) => void;
+    changeTaskIsDone: (id: string, isDone: boolean) => void;
 };
 
 function Todolist(props: propsType) {
     let initInputValue = "";
-    const [newTaskTitle, setNewTaskTitle] = useState(initInputValue);
+    let [newTaskTitle, setNewTaskTitle] = useState(initInputValue);
 
     const addTask = () => {
+        newTaskTitle = newTaskTitle.trim();
+
+        if (newTaskTitle === "") {
+            alert("Enter task name");
+            return;
+        }
+
         props.addTask(newTaskTitle);
         setNewTaskTitle("");
     };
@@ -41,10 +48,6 @@ function Todolist(props: propsType) {
     const onActiveClickHandler = () => props.changeFilter("active");
     const onDoneClickHandler = () => props.changeFilter("done");
 
-    // const onChangeIsDoneHandler = () => {
-    //     props.changeTaskIsDone(task.id);
-    // }
-
     return (
         <div>
             <h3>{props.title}</h3>
@@ -60,8 +63,13 @@ function Todolist(props: propsType) {
             <ul>
                 {props.tasks.map((task) => {
                     const onRemoveTaskHandler = () => props.removeTask(task.id);
-                    const onChangeIsDoneHandler = () =>
-                        props.changeTaskIsDone(task.id);
+                    const onChangeIsDoneHandler = (
+                        e: React.ChangeEvent<HTMLInputElement>
+                    ) =>
+                        props.changeTaskIsDone(
+                            task.id,
+                            e.currentTarget.checked
+                        );
                     return (
                         <li key={task.id}>
                             <input

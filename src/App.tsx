@@ -41,11 +41,12 @@ function App() {
         setFilter(value);
     };
 
-    const updateTaskIsDone = (taskId: string) => {
-        const updatedTasks = tasks.map((task) =>
-            task.id === taskId ? { ...task, isDone: !task.isDone } : task
-        );
-        setTasks(updatedTasks);
+    const changeTaskIsDone = (taskId: string, isDone: boolean) => {
+        const task = tasks.find((task) => task.id === taskId);
+        if (task) {
+            task.isDone = isDone;
+        }
+        setTasks([...tasks]);
     };
 
     return (
@@ -56,7 +57,7 @@ function App() {
                 removeTask={removeTask}
                 addTask={addTask}
                 changeFilter={changeFilter}
-                changeTaskIsDone={updateTaskIsDone}
+                changeTaskIsDone={changeTaskIsDone}
             />
         </div>
     );
