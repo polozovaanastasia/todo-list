@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Todolist, { taskType } from "./components/Todolist/Todolist";
+import { v1 } from "uuid";
 
-export type filterValuesType = "all" | "active" | "completed";
+export type filterValuesType = "all" | "active" | "done";
 
 function App() {
     let [tasks, setTasks] = useState<Array<taskType>>([
-        { id: 1, title: "Html", isDone: true },
-        { id: 2, title: "Css", isDone: true },
-        { id: 3, title: "JS", isDone: true },
-        { id: 4, title: "React", isDone: false },
-        { id: 5, title: "Redux", isDone: false },
+        { id: v1(), title: "Html", isDone: true },
+        { id: v1(), title: "Css", isDone: true },
+        { id: v1(), title: "JS", isDone: true },
+        { id: v1(), title: "React", isDone: false },
+        { id: v1(), title: "Redux", isDone: false },
     ]);
 
     let [filter, setFilter] = useState<filterValuesType>("all");
@@ -18,18 +19,18 @@ function App() {
     if (filter === "active") {
         tasksForTodoList = tasks.filter((task) => !task.isDone);
     }
-    if (filter === "completed") {
+    if (filter === "done") {
         tasksForTodoList = tasks.filter((task) => task.isDone);
     }
 
-    const removeTask = (taskId: number) => {
+    const removeTask = (taskId: string) => {
         const updatedTasks = tasks.filter((task) => task.id !== taskId);
         setTasks(updatedTasks);
     };
 
     const addTask = (title: string) => {
         const newTask = {
-            id: tasks.length ? tasks[tasks.length - 1].id + 1 : 1,
+            id: v1(),
             title: title,
             isDone: false,
         };
@@ -40,6 +41,13 @@ function App() {
         setFilter(value);
     };
 
+    const updateTaskIsDone = (taskId: string) => {
+        const updatedTasks = tasks.map((task) =>
+            task.id === taskId ? { ...task, isDone: !task.isDone } : task
+        );
+        setTasks(updatedTasks);
+    };
+
     return (
         <div className="App">
             <Todolist
@@ -48,6 +56,7 @@ function App() {
                 removeTask={removeTask}
                 addTask={addTask}
                 changeFilter={changeFilter}
+                changeTaskIsDone={updateTaskIsDone}
             />
         </div>
     );
