@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Todolist, { taskType } from "./components/Todolist/Todolist";
 import { v1 } from "uuid";
+import "./App.css";
 
 export type filterValuesType = "all" | "active" | "done";
 
@@ -58,6 +59,7 @@ function App() {
                 addTask={addTask}
                 changeFilter={changeFilter}
                 changeTaskIsDone={changeTaskIsDone}
+                filter={filter}
             />
         </div>
     );
