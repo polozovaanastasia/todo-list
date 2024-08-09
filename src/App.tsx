@@ -12,9 +12,8 @@ type todolistsType = {
 
 function App() {
     const removeTask = (taskId: string, todolistId: string) => {
-        const updatedTasks = tasksObj[todolistId].filter(
-            (task) => task.id !== taskId
-        );
+        const tasks = tasksObj[todolistId];
+        const updatedTasks = tasks.filter((task) => task.id !== taskId);
         tasksObj[todolistId] = updatedTasks;
         setTasks({ ...tasksObj });
     };
@@ -51,6 +50,7 @@ function App() {
             setTasks({ ...tasksObj });
         }
     };
+
     const todolistsId1 = v1();
     const todolistsId2 = v1();
 
@@ -62,7 +62,7 @@ function App() {
         },
         {
             id: todolistsId2,
-            title: "Series",
+            title: "TV series",
             filter: "all",
         },
     ]);
@@ -81,6 +81,16 @@ function App() {
             { id: v1(), title: "The last of us", isDone: false },
         ],
     });
+
+    const removeTodolist = (todolistId: string) => {
+        const filteredTodolists = todolists.filter(
+            (tl) => tl.id !== todolistId
+        );
+        setTodolists([...filteredTodolists]);
+
+        delete tasksObj[todolistId];
+        setTasks({ ...tasksObj });
+    };
 
     return (
         <div className="App">
@@ -108,6 +118,7 @@ function App() {
                         changeFilter={changeFilter}
                         changeTaskIsDone={changeTaskIsDone}
                         filter={tl.filter}
+                        removeTodolist={removeTodolist}
                     />
                 );
             })}
