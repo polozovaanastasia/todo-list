@@ -8,12 +8,13 @@ export type taskType = {
 };
 
 type propsType = {
+    id: string;
     title: string;
     tasks: Array<taskType>;
-    removeTask: (id: string) => void;
-    addTask: (title: string) => void;
-    changeFilter: (value: filterValuesType) => void;
-    changeTaskIsDone: (id: string, isDone: boolean) => void;
+    removeTask: (id: string, todolistId: string) => void;
+    addTask: (title: string, todolistId: string) => void;
+    changeFilter: (value: filterValuesType, todolistId: string) => void;
+    changeTaskIsDone: (id: string, isDone: boolean, todolistId: string) => void;
     filter: filterValuesType;
 };
 
@@ -28,7 +29,7 @@ function Todolist(props: propsType) {
             setError("Task Title is required");
             return;
         }
-        props.addTask(newTaskTitle);
+        props.addTask(newTaskTitle, props.id);
         setNewTaskTitle("");
     };
 
@@ -45,9 +46,9 @@ function Todolist(props: propsType) {
         }
     };
 
-    const onAllClickHandler = () => props.changeFilter("all");
-    const onActiveClickHandler = () => props.changeFilter("active");
-    const onDoneClickHandler = () => props.changeFilter("done");
+    const onAllClickHandler = () => props.changeFilter("all", props.id);
+    const onActiveClickHandler = () => props.changeFilter("active", props.id);
+    const onDoneClickHandler = () => props.changeFilter("done", props.id);
 
     return (
         <div>
@@ -65,16 +66,23 @@ function Todolist(props: propsType) {
             </div>
             <ul>
                 {props.tasks.map((task) => {
-                    const onRemoveTaskHandler = () => props.removeTask(task.id);
+                    const onRemoveTaskHandler = () =>
+                        props.removeTask(task.id, props.id);
                     const onChangeIsDoneHandler = (
                         e: React.ChangeEvent<HTMLInputElement>
                     ) =>
                         props.changeTaskIsDone(
                             task.id,
-                            e.currentTarget.checked
+                            e.currentTarget.checked,
+                            props.id
                         );
                     return (
-                        <li key={task.id}>
+                        <li
+                            key={task.id}
+                            className={
+                                task.isDone ? "task__status_is-done" : ""
+                            }
+                        >
                             <input
                                 type="checkbox"
                                 checked={task.isDone}

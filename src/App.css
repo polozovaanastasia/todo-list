@@ -9,3 +9,7 @@
 .active-filter {
     background-color: brown;
 }
+
+.task__status_is-done {
+    opacity: 0.5;
+}
