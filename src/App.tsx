@@ -2,9 +2,10 @@ import { useState } from "react";
 import Todolist, { taskType } from "./components/Todolist/Todolist";
 import { v1 } from "uuid";
 import "./App.css";
+import AddItemForm from "./components/AddItemForm/AddItemForm";
 
 export type filterValuesType = "all" | "active" | "done";
-type todolistsType = {
+type todolistType = {
     id: string;
     title: string;
     filter: filterValuesType;
@@ -54,7 +55,7 @@ function App() {
     const todolistsId1 = v1();
     const todolistsId2 = v1();
 
-    let [todolists, setTodolists] = useState<Array<todolistsType>>([
+    let [todolists, setTodolists] = useState<Array<todolistType>>([
         {
             id: todolistsId1,
             title: "What to learn",
@@ -77,7 +78,7 @@ function App() {
         ],
         [todolistsId2]: [
             { id: v1(), title: "Under the Bridge", isDone: false },
-            { id: v1(), title: "Severance", isDone: true },
+            { id: v1(), title: "Severanse", isDone: true },
             { id: v1(), title: "The last of us", isDone: false },
         ],
     });
@@ -92,8 +93,30 @@ function App() {
         setTasks({ ...tasksObj });
     };
 
+    const createTodolist = (title: string) => {
+        const newTodolistId = v1();
+        let newTodolist: todolistType = {
+            id: newTodolistId,
+            title: title,
+            filter: "all",
+        };
+
+        let udatedTodolists = [...todolists, newTodolist];
+        setTodolists([...udatedTodolists]);
+        setTasks({ ...tasksObj, [newTodolistId]: [] }); // я не понимаю этот синтаксис.
+
+        // setTasks(prevTasks => ({
+        //     ...prevTasks, // Сохраняем предыдущее состояние
+        //     [newTodolistId]: []
+        // }));
+    };
+
     return (
         <div className="App">
+            <div>
+                <h2>Добавить новый плейлист:</h2>
+                <AddItemForm addTask={addTask} createList={createTodolist} />
+            </div>
             {todolists.map((tl) => {
                 let tasksForTodoList = tasksObj[tl.id];
                 if (tl.filter === "active") {
@@ -119,6 +142,7 @@ function App() {
                         changeTaskIsDone={changeTaskIsDone}
                         filter={tl.filter}
                         removeTodolist={removeTodolist}
+                        createTodolist={createTodolist}
                     />
                 );
             })}
