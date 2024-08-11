@@ -17,7 +17,6 @@ type propsType = {
     changeTaskIsDone: (id: string, isDone: boolean, todolistId: string) => void;
     filter: filterValuesType;
     removeTodolist: (todolistId: string) => void;
-    createTodolist: (title: string) => void;
 };
 
 function Todolist({
@@ -30,15 +29,16 @@ function Todolist({
     changeTaskIsDone,
     filter,
     removeTodolist,
-    createTodolist,
 }: propsType) {
     const onAllClickHandler = () => changeFilter("all", id);
     const onActiveClickHandler = () => changeFilter("active", id);
     const onDoneClickHandler = () => changeFilter("done", id);
 
     const removeTodolistHandler = () => removeTodolist(id);
-    const createTodolistHandler = (title: string) => createTodolist(title);
 
+    const addTaskHandler = (title: string) => {
+        addTask(title, id);
+    };
     return (
         <div>
             <h3>
@@ -46,11 +46,7 @@ function Todolist({
                 <button onClick={removeTodolistHandler}>x</button>
             </h3>
 
-            <AddItemForm
-                todolistId={id}
-                addTask={addTask}
-                createList={createTodolistHandler}
-            />
+            <AddItemForm addItem={addTaskHandler} />
 
             <ul>
                 {tasks.map((task) => {

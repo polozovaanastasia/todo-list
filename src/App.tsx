@@ -11,6 +11,10 @@ type todolistType = {
     filter: filterValuesType;
 };
 
+type tasksStateType = {
+    [key: string]: Array<taskType>;
+};
+
 function App() {
     const removeTask = (taskId: string, todolistId: string) => {
         const tasks = tasksObj[todolistId];
@@ -68,7 +72,7 @@ function App() {
         },
     ]);
 
-    let [tasksObj, setTasks] = useState({
+    let [tasksObj, setTasks] = useState<tasksStateType>({
         [todolistsId1]: [
             { id: v1(), title: "Html", isDone: true },
             { id: v1(), title: "Css", isDone: true },
@@ -93,40 +97,32 @@ function App() {
         setTasks({ ...tasksObj });
     };
 
-    const createTodolist = (title: string) => {
-        const newTodolistId = v1();
+    const addTodolist = (title: string) => {
         let newTodolist: todolistType = {
-            id: newTodolistId,
+            id: v1(),
             title: title,
             filter: "all",
         };
-
-        let udatedTodolists = [...todolists, newTodolist];
-        setTodolists([...udatedTodolists]);
-        setTasks({ ...tasksObj, [newTodolistId]: [] }); // я не понимаю этот синтаксис.
-
-        // setTasks(prevTasks => ({
-        //     ...prevTasks, // Сохраняем предыдущее состояние
-        //     [newTodolistId]: []
-        // }));
+        setTodolists([...todolists, newTodolist]);
+        setTasks({ ...tasksObj, [newTodolist.id]: [] }); // я не понимаю этот синтаксис.
     };
 
     return (
         <div className="App">
             <div>
                 <h2>Добавить новый плейлист:</h2>
-                <AddItemForm addTask={addTask} createList={createTodolist} />
+                <AddItemForm addItem={addTodolist} />
             </div>
             {todolists.map((tl) => {
                 let tasksForTodoList = tasksObj[tl.id];
                 if (tl.filter === "active") {
                     tasksForTodoList = tasksObj[tl.id].filter(
-                        (task) => !task.isDone
+                        (task: taskType) => !task.isDone
                     );
                 }
                 if (tl.filter === "done") {
                     tasksForTodoList = tasksObj[tl.id].filter(
-                        (task) => task.isDone
+                        (task: taskType) => task.isDone
                     );
                 }
 
@@ -142,7 +138,7 @@ function App() {
                         changeTaskIsDone={changeTaskIsDone}
                         filter={tl.filter}
                         removeTodolist={removeTodolist}
-                        createTodolist={createTodolist}
+                        // createTodolist={createTodolist}
                     />
                 );
             })}

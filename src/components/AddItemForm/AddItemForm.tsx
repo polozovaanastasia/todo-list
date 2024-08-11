@@ -1,16 +1,10 @@
 import { useState } from "react";
 
 type AddItemFormPropsType = {
-    todolistId?: string;
-    addTask: (title: string, todolistId: string) => void;
-    createList: (title: string) => void;
+    addItem: (title: string) => void;
 };
 
-function AddItemForm({
-    todolistId,
-    addTask,
-    createList,
-}: AddItemFormPropsType) {
+function AddItemForm({ addItem }: AddItemFormPropsType) {
     let [title, setTitle] = useState("");
     let [error, setError] = useState<null | string>(null);
 
@@ -23,7 +17,6 @@ function AddItemForm({
     const onKeyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
         setError(null);
         if (e.ctrlKey && e.key === "Enter") {
-            // addTaskHandler();
             addHandler();
         }
     };
@@ -35,8 +28,7 @@ function AddItemForm({
             setError("Task Title is required");
             return;
         }
-
-        todolistId ? addTask(title, todolistId) : createList(title);
+        addItem(title);
         setTitle("");
     };
 
