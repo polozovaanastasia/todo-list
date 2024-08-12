@@ -2,6 +2,7 @@ import { useState } from "react";
 import { filterValuesType } from "../../App";
 import AddItemForm from "../AddItemForm/AddItemForm";
 import EditableSpan from "../EditableSpan/EditableSpan";
+import { ERROR_MESSAGES } from "../../utils/errorMessages";
 
 export type taskType = {
     id: string;
@@ -60,11 +61,15 @@ function Todolist({
                 <EditableSpan
                     title={title}
                     onChange={updateTodolistTitleHandler}
+                    errorMessage={ERROR_MESSAGES.EMPTY_TODOLIST_TITLE}
                 />
                 <button onClick={removeTodolistHandler}>x</button>
             </h3>
 
-            <AddItemForm addItem={addTaskHandler} />
+            <AddItemForm
+                addItem={addTaskHandler}
+                errorMessage={ERROR_MESSAGES.EMPTY_TASK_TITLE}
+            />
 
             <ul>
                 {tasks.map((task) => {
@@ -91,6 +96,7 @@ function Todolist({
                             <EditableSpan
                                 title={task.title}
                                 onChange={onChangeTaskTitleHandler}
+                                errorMessage={ERROR_MESSAGES.EMPTY_TASK_TITLE}
                             />
                             <button onClick={onRemoveTaskHandler}>x</button>
                         </li>

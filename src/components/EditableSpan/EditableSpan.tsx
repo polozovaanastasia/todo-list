@@ -1,11 +1,17 @@
 import { useState } from "react";
+import { ErrorMessageValues } from "../../utils/errorMessages";
 
 type EditableSpanPropsType = {
     title: string;
     onChange: (newTaskTitle: string) => void;
+    errorMessage: ErrorMessageValues;
 };
 
-const EditableSpan = ({ title, onChange }: EditableSpanPropsType) => {
+const EditableSpan = ({
+    title,
+    onChange,
+    errorMessage,
+}: EditableSpanPropsType) => {
     let [newTitle, setNewTitle] = useState(title);
     const [editMode, setEditMode] = useState(false);
     const [error, setError] = useState<null | string>(null);
@@ -15,6 +21,10 @@ const EditableSpan = ({ title, onChange }: EditableSpanPropsType) => {
     };
     const activateViewMode = () => {
         const trimmedTitle = newTitle.trim();
+        if (trimmedTitle === "") {
+            setError(errorMessage);
+            return;
+        }
         onChange(trimmedTitle);
         setNewTitle(trimmedTitle);
         setEditMode(false);

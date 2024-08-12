@@ -3,6 +3,7 @@ import Todolist, { taskType } from "./components/Todolist/Todolist";
 import { v1 } from "uuid";
 import "./App.css";
 import AddItemForm from "./components/AddItemForm/AddItemForm";
+import { ERROR_MESSAGES } from "./utils/errorMessages";
 
 export type filterValuesType = "all" | "active" | "done";
 type todolistType = {
@@ -131,10 +132,13 @@ function App() {
     };
 
     return (
-        <div className="App">
+        <div className="app">
             <div>
-                <h2>Добавить новый плейлист:</h2>
-                <AddItemForm addItem={addTodolist} />
+                <h2>Add a new to-do list:</h2>
+                <AddItemForm
+                    addItem={addTodolist}
+                    errorMessage={ERROR_MESSAGES.EMPTY_TODOLIST_TITLE}
+                />
             </div>
             {todolists.map((tl) => {
                 let tasksForTodoList = tasksObj[tl.id];

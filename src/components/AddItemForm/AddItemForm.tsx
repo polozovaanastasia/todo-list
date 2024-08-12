@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { ErrorMessageValues } from "../../utils/errorMessages";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void;
+    errorMessage: ErrorMessageValues;
 };
 
-function AddItemForm({ addItem }: AddItemFormPropsType) {
+function AddItemForm({ addItem, errorMessage }: AddItemFormPropsType) {
     let [title, setTitle] = useState("");
     let [error, setError] = useState<null | string>(null);
 
@@ -15,17 +17,21 @@ function AddItemForm({ addItem }: AddItemFormPropsType) {
     };
 
     const onKeyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
         if (e.ctrlKey && e.key === "Enter") {
+            setError(null);
             addHandler();
         }
+    };
+
+    const onFocusHandler = () => {
+        setError(null);
     };
 
     const addHandler = () => {
         title = title.trim();
 
         if (title === "") {
-            setError("Task Title is required");
+            setError(errorMessage);
             return;
         }
         addItem(title);
@@ -39,6 +45,7 @@ function AddItemForm({ addItem }: AddItemFormPropsType) {
                 value={title}
                 onChange={onNewTitleChangeHandler}
                 onKeyUp={onKeyUpHandler}
+                onFocus={onFocusHandler}
                 className={error ? "error" : ""}
             />
             <button onClick={addHandler}>+</button>
