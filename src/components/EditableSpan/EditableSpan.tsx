@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ErrorMessageValues } from "../../utils/errorMessages";
+import CustomTextField from "../../styles/customComponent/CustomTextField";
 
 type EditableSpanPropsType = {
     title: string;
@@ -34,32 +35,20 @@ const EditableSpan = ({
         setNewTitle(e.currentTarget.value);
     };
 
-    // const setTaskTitleValue = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    //     if (e.ctrlKey && e.key === "Enter") {
-    //         newItemTitle = newItemTitle.trim();
-
-    //         if (newItemTitle === "") {
-    //             setError("Task Title cannot be empty.");
-    //             return;
-    //         }
-    //         setNewitemTitle(newItemTitle);
-    //         setEditMode(false);
-    //     }
-    // };
-
     return (
-        <span>
+        <span className="task-title-container">
             {editMode ? (
                 <>
-                    <input
-                        type="text"
+                    <CustomTextField
                         value={newTitle}
+                        error={!!error}
+                        helperText={error}
+                        size="small"
+                        variant="outlined"
                         onChange={changeTaskTitleValue}
-                        // onKeyUp={setTaskTitleValue}
                         onBlur={activateViewMode}
                         autoFocus
                     />
-                    {error && <div className="error-message">{error}</div>}
                 </>
             ) : (
                 <span onDoubleClick={activateEditMode}>{newTitle}</span>

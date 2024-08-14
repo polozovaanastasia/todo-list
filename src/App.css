@@ -7,6 +7,64 @@ ul {
     padding: 15px 50px;
 }
 
+.todo-list-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.todo-list-creation {
+    margin-bottom: 70px;
+}
+
+.todolist-container {
+    margin-bottom: 50px;
+    color: white;
+}
+
+h3 {
+    display: flex;
+    align-items: center;
+}
+
+li {
+    display: flex;
+    align-items: flex-start;
+}
+
+.task-title-container {
+    align-self: center;
+}
+
+.btn {
+    width: 18px;
+    height: 18px;
+    background: white no-repeat center;
+
+    border: none;
+    cursor: pointer;
+}
+
+.remove-btn {
+    background-image: url(../public/delete-bin_icon.png);
+}
+
+.add-btn {
+    width: auto;
+    border: 1px solid black;
+
+    /* background-image: url(../public/add_icon.png); */
+}
+
+.filter-btn {
+    background: white no-repeat center;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.filter-btn:not(:last-child) {
+    border-right: none;
+}
+
 .error {
     border: 1px solid brown;
 }
@@ -16,9 +74,13 @@ ul {
 }
 
 .active-filter {
-    background-color: brown;
+    background-color: #7ebbff;
 }
 
 .task__status_is-done {
     opacity: 0.5;
+}
+
+.item-form button {
+    margin-left: 10px;
 }

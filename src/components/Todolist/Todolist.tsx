@@ -1,8 +1,16 @@
-import { useState } from "react";
 import { filterValuesType } from "../../App";
 import AddItemForm from "../AddItemForm/AddItemForm";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import { ERROR_MESSAGES } from "../../utils/errorMessages";
+import {
+    Box,
+    Button,
+    ButtonGroup,
+    Checkbox,
+    IconButton,
+    SvgIcon,
+} from "@mui/material";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 export type taskType = {
     id: string;
@@ -55,80 +63,149 @@ function Todolist({
         addTask(title, id);
     };
 
+    const CheckBoxBlankIcon = () => (
+        <SvgIcon>
+            <svg
+                focusable="false"
+                aria-hidden="true"
+                data-testid="CheckBoxBlankIcon"
+            >
+                <path
+                    d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5"
+                    fill="white"
+                ></path>
+            </svg>
+        </SvgIcon>
+    );
+
     return (
-        <div>
-            <h3>
-                <EditableSpan
-                    title={title}
-                    onChange={updateTodolistTitleHandler}
-                    errorMessage={ERROR_MESSAGES.EMPTY_TODOLIST_TITLE}
+        <Box
+            height="auto"
+            width={400}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            p={2}
+            mr={10}
+            mb={10}
+            sx={{
+                minWidth: "200px",
+                bgcolor: "#282828",
+                borderRadius: "16px",
+            }}
+        >
+            <div className="todolist-container">
+                <h3>
+                    <EditableSpan
+                        title={title}
+                        onChange={updateTodolistTitleHandler}
+                        errorMessage={ERROR_MESSAGES.EMPTY_TODOLIST_TITLE}
+                    />
+                    <IconButton
+                        color="primary"
+                        aria-label="Delete"
+                        onClick={removeTodolistHandler}
+                    >
+                        <DeleteOutlineIcon />
+                    </IconButton>
+                </h3>
+
+                <AddItemForm
+                    addItem={addTaskHandler}
+                    errorMessage={ERROR_MESSAGES.EMPTY_TASK_TITLE}
                 />
-                <button onClick={removeTodolistHandler}>x</button>
-            </h3>
 
-            <AddItemForm
-                addItem={addTaskHandler}
-                errorMessage={ERROR_MESSAGES.EMPTY_TASK_TITLE}
-            />
+                <ul>
+                    {tasks.map((task) => {
+                        const onRemoveTaskHandler = () =>
+                            removeTask(task.id, id);
+                        const onChangeIsDoneHandler = (
+                            e: React.ChangeEvent<HTMLInputElement>
+                        ) =>
+                            changeTaskIsDone(
+                                task.id,
+                                e.currentTarget.checked,
+                                id
+                            );
 
-            <ul>
-                {tasks.map((task) => {
-                    const onRemoveTaskHandler = () => removeTask(task.id, id);
-                    const onChangeIsDoneHandler = (
-                        e: React.ChangeEvent<HTMLInputElement>
-                    ) => changeTaskIsDone(task.id, e.currentTarget.checked, id);
+                        const onChangeTaskTitleHandler = (
+                            newTackTitle: string
+                        ) => {
+                            updateTaskTitle(newTackTitle, task.id, id);
+                        };
+                        return (
+                            <li
+                                key={task.id}
+                                className={
+                                    task.isDone ? "task__status_is-done" : ""
+                                }
+                            >
+                                <Checkbox
+                                    icon={<CheckBoxBlankIcon />}
+                                    checked={task.isDone}
+                                    onChange={onChangeIsDoneHandler}
+                                    sx={{
+                                        paddingLeft: 0,
+                                    }}
+                                />
+                                <EditableSpan
+                                    title={task.title}
+                                    onChange={onChangeTaskTitleHandler}
+                                    errorMessage={
+                                        ERROR_MESSAGES.EMPTY_TASK_TITLE
+                                    }
+                                />
 
-                    const onChangeTaskTitleHandler = (newTackTitle: string) => {
-                        updateTaskTitle(newTackTitle, task.id, id);
-                    };
-                    return (
-                        <li
-                            key={task.id}
-                            className={
-                                task.isDone ? "task__status_is-done" : ""
+                                <IconButton
+                                    color="primary"
+                                    aria-label="Delete"
+                                    onClick={onRemoveTaskHandler}
+                                >
+                                    <DeleteOutlineIcon />
+                                </IconButton>
+                            </li>
+                        );
+                    })}
+                    {!tasks.length && (
+                        <div className="error-message">
+                            No tasks in the selected category
+                        </div>
+                    )}
+                </ul>
+                <div>
+                    <ButtonGroup
+                        size="small"
+                        variant="contained"
+                        aria-label="Basic button group"
+                    >
+                        <Button
+                            variant={
+                                filter === "all" ? "contained" : "outlined"
                             }
+                            onClick={onAllClickHandler}
                         >
-                            <input
-                                type="checkbox"
-                                checked={task.isDone}
-                                onChange={onChangeIsDoneHandler}
-                            />
-                            <EditableSpan
-                                title={task.title}
-                                onChange={onChangeTaskTitleHandler}
-                                errorMessage={ERROR_MESSAGES.EMPTY_TASK_TITLE}
-                            />
-                            <button onClick={onRemoveTaskHandler}>x</button>
-                        </li>
-                    );
-                })}
-                {!tasks.length && (
-                    <div className="error-message">
-                        No tasks in the selected category
-                    </div>
-                )}
-            </ul>
-            <div>
-                <button
-                    className={filter === "all" ? "active-filter" : ""}
-                    onClick={onAllClickHandler}
-                >
-                    All
-                </button>
-                <button
-                    className={filter === "active" ? "active-filter" : ""}
-                    onClick={onActiveClickHandler}
-                >
-                    Active
-                </button>
-                <button
-                    className={filter === "done" ? "active-filter" : ""}
-                    onClick={onDoneClickHandler}
-                >
-                    Completed
-                </button>
+                            All
+                        </Button>
+                        <Button
+                            variant={
+                                filter === "active" ? "contained" : "outlined"
+                            }
+                            onClick={onActiveClickHandler}
+                        >
+                            Active
+                        </Button>
+                        <Button
+                            variant={
+                                filter === "done" ? "contained" : "outlined"
+                            }
+                            onClick={onDoneClickHandler}
+                        >
+                            Completed
+                        </Button>
+                    </ButtonGroup>
+                </div>
             </div>
-        </div>
+        </Box>
     );
 }
 

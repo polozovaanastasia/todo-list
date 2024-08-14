@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { ErrorMessageValues } from "../../utils/errorMessages";
+import { Button, TextField } from "@mui/material";
+import Add from "@mui/icons-material/Add";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void;
@@ -39,17 +41,30 @@ function AddItemForm({ addItem, errorMessage }: AddItemFormPropsType) {
     };
 
     return (
-        <div>
-            <input
-                type="text"
+        <div className="item-form">
+            <TextField
                 value={title}
+                error={!!error}
+                helperText={error}
+                size="small"
+                variant="outlined"
                 onChange={onNewTitleChangeHandler}
                 onKeyUp={onKeyUpHandler}
                 onFocus={onFocusHandler}
-                className={error ? "error" : ""}
+                sx={{
+                    "& .MuiOutlinedInput-root": {
+                        backgroundColor: "#ffffff",
+                    },
+                }}
             />
-            <button onClick={addHandler}>+</button>
-            {error && <div className="error-message">{error}</div>}
+            <Button
+                size="medium"
+                variant="contained"
+                startIcon={<Add />}
+                onClick={addHandler}
+            >
+                Add
+            </Button>
         </div>
     );
 }
