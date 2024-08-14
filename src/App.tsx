@@ -140,7 +140,7 @@ function App() {
                     errorMessage={ERROR_MESSAGES.EMPTY_TODOLIST_TITLE}
                 />
             </div>
-            <div className="todo-list-container">
+            <div className="todolists-container">
                 {todolists.map((tl) => {
                     let tasksForTodoList = tasksObj[tl.id];
                     if (tl.filter === "active") {

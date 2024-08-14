@@ -83,9 +83,7 @@ function Todolist({
             height="auto"
             width={400}
             display="flex"
-            alignItems="center"
-            justifyContent="center"
-            p={2}
+            p="50px 25px"
             mr={10}
             mb={10}
             sx={{
@@ -94,84 +92,88 @@ function Todolist({
                 borderRadius: "16px",
             }}
         >
-            <div className="todolist-container">
-                <h3>
-                    <EditableSpan
-                        title={title}
-                        onChange={updateTodolistTitleHandler}
-                        errorMessage={ERROR_MESSAGES.EMPTY_TODOLIST_TITLE}
+            <div className="todolist">
+                <div className="todolist__section">
+                    <h3>
+                        <EditableSpan
+                            title={title}
+                            onChange={updateTodolistTitleHandler}
+                            errorMessage={ERROR_MESSAGES.EMPTY_TODOLIST_TITLE}
+                        />
+                        <IconButton
+                            color="primary"
+                            aria-label="Delete"
+                            onClick={removeTodolistHandler}
+                        >
+                            <DeleteOutlineIcon />
+                        </IconButton>
+                    </h3>
+
+                    <AddItemForm
+                        addItem={addTaskHandler}
+                        errorMessage={ERROR_MESSAGES.EMPTY_TASK_TITLE}
                     />
-                    <IconButton
-                        color="primary"
-                        aria-label="Delete"
-                        onClick={removeTodolistHandler}
-                    >
-                        <DeleteOutlineIcon />
-                    </IconButton>
-                </h3>
+                    <ul>
+                        {tasks.map((task) => {
+                            const onRemoveTaskHandler = () =>
+                                removeTask(task.id, id);
+                            const onChangeIsDoneHandler = (
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) =>
+                                changeTaskIsDone(
+                                    task.id,
+                                    e.currentTarget.checked,
+                                    id
+                                );
 
-                <AddItemForm
-                    addItem={addTaskHandler}
-                    errorMessage={ERROR_MESSAGES.EMPTY_TASK_TITLE}
-                />
-
-                <ul>
-                    {tasks.map((task) => {
-                        const onRemoveTaskHandler = () =>
-                            removeTask(task.id, id);
-                        const onChangeIsDoneHandler = (
-                            e: React.ChangeEvent<HTMLInputElement>
-                        ) =>
-                            changeTaskIsDone(
-                                task.id,
-                                e.currentTarget.checked,
-                                id
-                            );
-
-                        const onChangeTaskTitleHandler = (
-                            newTackTitle: string
-                        ) => {
-                            updateTaskTitle(newTackTitle, task.id, id);
-                        };
-                        return (
-                            <li
-                                key={task.id}
-                                className={
-                                    task.isDone ? "task__status_is-done" : ""
-                                }
-                            >
-                                <Checkbox
-                                    icon={<CheckBoxBlankIcon />}
-                                    checked={task.isDone}
-                                    onChange={onChangeIsDoneHandler}
-                                    sx={{
-                                        paddingLeft: 0,
-                                    }}
-                                />
-                                <EditableSpan
-                                    title={task.title}
-                                    onChange={onChangeTaskTitleHandler}
-                                    errorMessage={
-                                        ERROR_MESSAGES.EMPTY_TASK_TITLE
+                            const onChangeTaskTitleHandler = (
+                                newTackTitle: string
+                            ) => {
+                                updateTaskTitle(newTackTitle, task.id, id);
+                            };
+                            return (
+                                <li
+                                    key={task.id}
+                                    className={
+                                        task.isDone
+                                            ? "task__status_is-done"
+                                            : ""
                                     }
-                                />
-
-                                <IconButton
-                                    color="primary"
-                                    aria-label="Delete"
-                                    onClick={onRemoveTaskHandler}
                                 >
-                                    <DeleteOutlineIcon />
-                                </IconButton>
-                            </li>
-                        );
-                    })}
-                    {!tasks.length && (
-                        <div className="error-message">
-                            No tasks in the selected category
-                        </div>
-                    )}
-                </ul>
+                                    <Checkbox
+                                        icon={<CheckBoxBlankIcon />}
+                                        checked={task.isDone}
+                                        onChange={onChangeIsDoneHandler}
+                                        sx={{
+                                            paddingLeft: 0,
+                                        }}
+                                    />
+                                    <EditableSpan
+                                        title={task.title}
+                                        onChange={onChangeTaskTitleHandler}
+                                        errorMessage={
+                                            ERROR_MESSAGES.EMPTY_TASK_TITLE
+                                        }
+                                    />
+
+                                    <IconButton
+                                        color="primary"
+                                        aria-label="Delete"
+                                        onClick={onRemoveTaskHandler}
+                                    >
+                                        <DeleteOutlineIcon />
+                                    </IconButton>
+                                </li>
+                            );
+                        })}
+                        {!tasks.length && (
+                            <div className="error-message">
+                                No tasks in the selected category
+                            </div>
+                        )}
+                    </ul>
+                </div>
+
                 <div>
                     <ButtonGroup
                         size="small"

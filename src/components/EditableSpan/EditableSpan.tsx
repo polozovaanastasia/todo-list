@@ -36,7 +36,7 @@ const EditableSpan = ({
     };
 
     return (
-        <span className="task-title-container">
+        <span className={"task-title-container"}>
             {editMode ? (
                 <>
                     <CustomTextField

@@ -7,7 +7,7 @@ ul {
     padding: 15px 50px;
 }
 
-.todo-list-container {
+.todolists-container {
     display: flex;
     flex-wrap: wrap;
 }
@@ -16,14 +16,15 @@ ul {
     margin-bottom: 70px;
 }
 
-.todolist-container {
-    margin-bottom: 50px;
+.todolist {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     color: white;
 }
 
-h3 {
-    display: flex;
-    align-items: center;
+.todolist__section h3 {
+    margin: 0;
 }
 
 li {
@@ -78,7 +79,7 @@ li {
 }
 
 .task__status_is-done {
-    opacity: 0.5;
+    filter: opacity(50%);
 }
 
 .item-form button {
