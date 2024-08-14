@@ -133,14 +133,14 @@ function App() {
 
     return (
         <div className="app">
-            <div className="todo-list-creation">
+            <div className="app__todolist-creation">
                 <h3>Add a new to-do list:</h3>
                 <AddItemForm
                     addItem={addTodolist}
                     errorMessage={ERROR_MESSAGES.EMPTY_TODOLIST_TITLE}
                 />
             </div>
-            <div className="todolists-container">
+            <div className="app__todolists-container">
                 {todolists.map((tl) => {
                     let tasksForTodoList = tasksObj[tl.id];
                     if (tl.filter === "active") {

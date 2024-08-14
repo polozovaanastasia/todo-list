@@ -113,7 +113,7 @@ function Todolist({
                         addItem={addTaskHandler}
                         errorMessage={ERROR_MESSAGES.EMPTY_TASK_TITLE}
                     />
-                    <ul>
+                    <ul className="todolist__task-list">
                         {tasks.map((task) => {
                             const onRemoveTaskHandler = () =>
                                 removeTask(task.id, id);
@@ -134,11 +134,9 @@ function Todolist({
                             return (
                                 <li
                                     key={task.id}
-                                    className={
-                                        task.isDone
-                                            ? "task__status_is-done"
-                                            : ""
-                                    }
+                                    className={`task ${
+                                        task.isDone ? "task_status-is-done" : ""
+                                    }`}
                                 >
                                     <Checkbox
                                         icon={<CheckBoxBlankIcon />}
