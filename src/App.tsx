@@ -6,7 +6,7 @@ import AddItemForm from "./components/AddItemForm/AddItemForm";
 import { ERROR_MESSAGES } from "./utils/errorMessages";
 
 export type filterValuesType = "all" | "active" | "done";
-type todolistType = {
+export type todolistType = {
     id: string;
     title: string;
     filter: filterValuesType;
