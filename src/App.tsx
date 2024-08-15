@@ -12,7 +12,7 @@ export type todolistType = {
     filter: filterValuesType;
 };
 
-type tasksStateType = {
+export type tasksStateType = {
     [key: string]: Array<taskType>;
 };
 
@@ -80,12 +80,12 @@ function App() {
         }
     };
 
-    const todolistsId1 = v1();
+    const todolistId1 = v1();
     const todolistsId2 = v1();
 
     let [todolists, setTodolists] = useState<Array<todolistType>>([
         {
-            id: todolistsId1,
+            id: todolistId1,
             title: "What to learn",
             filter: "active",
         },
@@ -97,7 +97,7 @@ function App() {
     ]);
 
     let [tasksObj, setTasks] = useState<tasksStateType>({
-        [todolistsId1]: [
+        [todolistId1]: [
             { id: v1(), title: "Html", isDone: true },
             { id: v1(), title: "Css", isDone: true },
             { id: v1(), title: "JS", isDone: true },
@@ -128,7 +128,7 @@ function App() {
             filter: "all",
         };
         setTodolists([...todolists, newTodolist]);
-        setTasks({ ...tasksObj, [newTodolist.id]: [] }); // я не понимаю этот синтаксис.
+        setTasks({ ...tasksObj, [newTodolist.id]: [] });
     };
 
     return (

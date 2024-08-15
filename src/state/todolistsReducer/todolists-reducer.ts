@@ -1,5 +1,5 @@
 import { v1 } from "uuid";
-import { todolistType } from "../App";
+import { todolistType } from "../../App";
 
 type actionType = {
     type: string;
@@ -47,6 +47,5 @@ export const todolistsReducer = (
             break;
         default:
             throw new Error("Error");
-            break;
     }
 };
