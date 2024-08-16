@@ -1,71 +1,103 @@
 import { v1 } from "uuid";
-import { todolistType } from "../../App";
+import { FilterValuesType, TodolistType } from "../../App";
 
-type actionType =
-    | removeTodolistActionType
-    | addTodolistActionType
-    | updateTodolistActionType
-    | changeTodolistFilterActionType;
+type ActionType =
+    | RemoveTodolistActionType
+    | AddTodolistActionType
+    | UpdateTodolistActionType
+    | ChangeTodolistFilterActionType;
 
-type removeTodolistActionType = {
+type RemoveTodolistActionType = {
     type: "REMOVE-TODOLIST";
     id: string;
 };
-type addTodolistActionType = {
+type AddTodolistActionType = {
     type: "ADD-TODOLIST";
     title: string;
 };
-type updateTodolistActionType = {
+type UpdateTodolistActionType = {
     type: "UPDATE-TODOLIST";
     id: string;
     newTitle: string;
 };
-type changeTodolistFilterActionType = {
+type ChangeTodolistFilterActionType = {
     type: "CHANGE-TODOLIST-FILTER";
     id: string;
-    newFilterValue: "all" | "active" | "done";
+    newFilterValue: FilterValuesType;
 };
 
 export const todolistsReducer = (
-    state: Array<todolistType>,
-    action: actionType
+    state: Array<TodolistType>,
+    action: ActionType
 ) => {
     switch (action.type) {
-        case "REMOVE-TODOLIST":
-            {
-                return state.filter((tl) => tl.id !== action.id);
-            }
-            break;
-        case "ADD-TODOLIST":
-            {
-                let newTodolist: todolistType = {
-                    id: v1(),
-                    title: action.title,
-                    filter: "all",
-                };
+        case "REMOVE-TODOLIST": {
+            return state.filter((tl) => tl.id !== action.id);
+        }
+        case "ADD-TODOLIST": {
+            let newTodolist: TodolistType = {
+                id: v1(),
+                title: action.title,
+                filter: "all",
+            };
 
-                return [...state, newTodolist];
+            return [...state, newTodolist];
+        }
+        case "UPDATE-TODOLIST": {
+            let todolist = state.find((tl) => tl.id === action.id);
+            if (todolist) {
+                todolist.title = action.newTitle;
             }
-            break;
-        case "UPDATE-TODOLIST":
-            {
-                let todolist = state.find((tl) => tl.id === action.id);
-                if (todolist) {
-                    todolist.title = action.newTitle;
-                }
-                return [...state];
+            return [...state];
+        }
+        case "CHANGE-TODOLIST-FILTER": {
+            let todolist = state.find((tl) => tl.id === action.id);
+            if (todolist) {
+                todolist.filter = action.newFilterValue;
             }
-            break;
-        case "CHANGE-TODOLIST-FILTER":
-            {
-                let todolist = state.find((tl) => tl.id === action.id);
-                if (todolist) {
-                    todolist.filter = action.newFilterValue;
-                }
-                return [...state];
-            }
-            break;
+            return [...state];
+        }
         default:
             throw new Error("Error");
     }
+};
+
+export const removeTodolistAC = (
+    todolistId1: string
+): RemoveTodolistActionType => {
+    return {
+        type: "REMOVE-TODOLIST",
+        id: todolistId1,
+    };
+};
+
+export const addTodolistAC = (
+    newTodolistTitle: string
+): AddTodolistActionType => {
+    return {
+        type: "ADD-TODOLIST",
+        title: newTodolistTitle,
+    };
+};
+
+export const updateTodolistAC = (
+    todolistId: string,
+    newTitle: string
+): UpdateTodolistActionType => {
+    return {
+        type: "UPDATE-TODOLIST",
+        id: todolistId,
+        newTitle: newTitle,
+    };
+};
+
+export const changeTodolistFilterAC = (
+    todolistId: string,
+    newFilterValue: FilterValuesType
+): ChangeTodolistFilterActionType => {
+    return {
+        type: "CHANGE-TODOLIST-FILTER",
+        id: todolistId,
+        newFilterValue: newFilterValue,
+    };
 };

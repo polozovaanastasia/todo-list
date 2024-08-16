@@ -1,4 +1,4 @@
-import { filterValuesType } from "../../App";
+import { FilterValuesType } from "../../App";
 import AddItemForm from "../AddItemForm/AddItemForm";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import { ERROR_MESSAGES } from "../../utils/errorMessages";
@@ -12,21 +12,21 @@ import {
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-export type taskType = {
+export type TaskType = {
     id: string;
     title: string;
     isDone: boolean;
 };
 
-type propsType = {
+type PropsType = {
     id: string;
     title: string;
-    tasks: Array<taskType>;
+    tasks: Array<TaskType>;
     removeTask: (id: string, todolistId: string) => void;
     addTask: (title: string, todolistId: string) => void;
-    changeFilter: (value: filterValuesType, todolistId: string) => void;
+    changeFilter: (value: FilterValuesType, todolistId: string) => void;
     changeTaskIsDone: (id: string, isDone: boolean, todolistId: string) => void;
-    filter: filterValuesType;
+    filter: FilterValuesType;
     removeTodolist: (todolistId: string) => void;
     updateTaskTitle: (
         taskTitle: string,
@@ -48,7 +48,7 @@ function Todolist({
     removeTodolist,
     updateTaskTitle,
     updateTodolistTitle,
-}: propsType) {
+}: PropsType) {
     const onAllClickHandler = () => changeFilter("all", id);
     const onActiveClickHandler = () => changeFilter("active", id);
     const onDoneClickHandler = () => changeFilter("done", id);

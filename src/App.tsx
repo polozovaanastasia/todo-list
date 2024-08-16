@@ -1,19 +1,19 @@
 import { useState } from "react";
-import Todolist, { taskType } from "./components/Todolist/Todolist";
+import Todolist, { TaskType } from "./components/Todolist/Todolist";
 import { v1 } from "uuid";
 import "./App.css";
 import AddItemForm from "./components/AddItemForm/AddItemForm";
 import { ERROR_MESSAGES } from "./utils/errorMessages";
 
-export type filterValuesType = "all" | "active" | "done";
-export type todolistType = {
+export type FilterValuesType = "all" | "active" | "done";
+export type TodolistType = {
     id: string;
     title: string;
-    filter: filterValuesType;
+    filter: FilterValuesType;
 };
 
-export type tasksStateType = {
-    [key: string]: Array<taskType>;
+export type TasksStateType = {
+    [key: string]: Array<TaskType>;
 };
 
 function App() {
@@ -58,7 +58,7 @@ function App() {
         setTodolists([...todolists]);
     };
 
-    const changeFilter = (value: filterValuesType, todolistId: string) => {
+    const changeFilter = (value: FilterValuesType, todolistId: string) => {
         let todolist = todolists.find((tl) => tl.id === todolistId);
         if (todolist) {
             todolist.filter = value;
@@ -83,7 +83,7 @@ function App() {
     const todolistId1 = v1();
     const todolistsId2 = v1();
 
-    let [todolists, setTodolists] = useState<Array<todolistType>>([
+    let [todolists, setTodolists] = useState<Array<TodolistType>>([
         {
             id: todolistId1,
             title: "What to learn",
@@ -96,7 +96,7 @@ function App() {
         },
     ]);
 
-    let [tasksObj, setTasks] = useState<tasksStateType>({
+    let [tasksObj, setTasks] = useState<TasksStateType>({
         [todolistId1]: [
             { id: v1(), title: "Html", isDone: true },
             { id: v1(), title: "Css", isDone: true },
@@ -122,7 +122,7 @@ function App() {
     };
 
     const addTodolist = (title: string) => {
-        let newTodolist: todolistType = {
+        let newTodolist: TodolistType = {
             id: v1(),
             title: title,
             filter: "all",
@@ -145,12 +145,12 @@ function App() {
                     let tasksForTodoList = tasksObj[tl.id];
                     if (tl.filter === "active") {
                         tasksForTodoList = tasksObj[tl.id].filter(
-                            (task: taskType) => !task.isDone
+                            (task: TaskType) => !task.isDone
                         );
                     }
                     if (tl.filter === "done") {
                         tasksForTodoList = tasksObj[tl.id].filter(
-                            (task: taskType) => task.isDone
+                            (task: TaskType) => task.isDone
                         );
                     }
 
