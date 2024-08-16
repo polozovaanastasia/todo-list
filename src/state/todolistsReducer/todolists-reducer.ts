@@ -1,9 +1,29 @@
 import { v1 } from "uuid";
 import { todolistType } from "../../App";
 
-type actionType = {
-    type: string;
-    [key: string]: any;
+type actionType =
+    | removeTodolistActionType
+    | addTodolistActionType
+    | updateTodolistActionType
+    | changeTodolistFilterActionType;
+
+type removeTodolistActionType = {
+    type: "REMOVE-TODOLIST";
+    id: string;
+};
+type addTodolistActionType = {
+    type: "ADD-TODOLIST";
+    title: string;
+};
+type updateTodolistActionType = {
+    type: "UPDATE-TODOLIST";
+    id: string;
+    newTitle: string;
+};
+type changeTodolistFilterActionType = {
+    type: "CHANGE-TODOLIST-FILTER";
+    id: string;
+    newFilterValue: "all" | "active" | "done";
 };
 
 export const todolistsReducer = (

@@ -1,9 +1,33 @@
 import { v1 } from "uuid";
 import { tasksStateType } from "../../App";
 
-type actionType = {
-    type: string;
-    [key: string]: any;
+type actionType =
+    | removeTaskActionType
+    | addTaskActionType
+    | updateTaskTitleActionType
+    | changeTaskIsDoneActionType;
+
+type removeTaskActionType = {
+    type: "REMOVE-TASK";
+    taskId: string;
+    todolistId: string;
+};
+type addTaskActionType = {
+    type: "ADD-TASK";
+    title: string;
+    todolistId: string;
+};
+type updateTaskTitleActionType = {
+    type: "UPDATE-TASK-TITLE";
+    title: string;
+    taskId: string;
+    todolistId: string;
+};
+type changeTaskIsDoneActionType = {
+    type: "CHANGE-TASK-IS-DONE";
+    taskId: string;
+    todolistId: string;
+    isDone: boolean;
 };
 
 export const tasksReducer = (state: tasksStateType, action: actionType) => {
@@ -41,7 +65,6 @@ export const tasksReducer = (state: tasksStateType, action: actionType) => {
         case "CHANGE-TASK-IS-DONE":
             {
                 const { todolistId, taskId, isDone } = action;
-
                 let tasks = state[todolistId];
                 const task = tasks.find((task) => task.id === taskId);
                 if (task) {
