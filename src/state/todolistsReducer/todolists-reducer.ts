@@ -7,13 +7,14 @@ type ActionType =
     | UpdateTodolistActionType
     | ChangeTodolistFilterActionType;
 
-type RemoveTodolistActionType = {
+export type RemoveTodolistActionType = {
     type: "REMOVE-TODOLIST";
     id: string;
 };
-type AddTodolistActionType = {
+export type AddTodolistActionType = {
     type: "ADD-TODOLIST";
     title: string;
+    id: string;
 };
 type UpdateTodolistActionType = {
     type: "UPDATE-TODOLIST";
@@ -29,14 +30,14 @@ type ChangeTodolistFilterActionType = {
 export const todolistsReducer = (
     state: Array<TodolistType>,
     action: ActionType
-) => {
+): Array<TodolistType> => {
     switch (action.type) {
         case "REMOVE-TODOLIST": {
             return state.filter((tl) => tl.id !== action.id);
         }
         case "ADD-TODOLIST": {
             let newTodolist: TodolistType = {
-                id: v1(),
+                id: action.id,
                 title: action.title,
                 filter: "all",
             };
@@ -58,7 +59,7 @@ export const todolistsReducer = (
             return [...state];
         }
         default:
-            throw new Error("Error");
+            return state;
     }
 };
 
@@ -77,6 +78,7 @@ export const addTodolistAC = (
     return {
         type: "ADD-TODOLIST",
         title: newTodolistTitle,
+        id: v1(),
     };
 };
 
