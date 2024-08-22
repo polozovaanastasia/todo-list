@@ -34,7 +34,7 @@ test("correct task should be removed", () => {
 
     const endState = tasksReducer(
         startState,
-        removeTaskAC(taskId1, todolistId1)
+        removeTaskAC({ taskId: taskId1, todolistId: todolistId1 })
     );
 
     expect(endState[todolistId1].length).toBe(1);
@@ -64,7 +64,7 @@ test("correct task should be added", () => {
 
     const endState = tasksReducer(
         startState,
-        addTaskAC(todolistId2, newTaskTitle)
+        addTaskAC({ todolistId: todolistId2, title: newTaskTitle })
     );
 
     expect(endState[todolistId1].length).toBe(2);
@@ -96,7 +96,11 @@ test("correct task title should be updated", () => {
 
     const endState = tasksReducer(
         startState,
-        updateTaskTitleAC(newTaskTitle, todolistId1, taskId1)
+        updateTaskTitleAC({
+            title: newTaskTitle,
+            todolistId: todolistId1,
+            taskId: taskId1,
+        })
     );
 
     expect(endState[todolistId1][0].title).toBe(newTaskTitle);
@@ -124,7 +128,11 @@ test("correct task is done status should be changed", () => {
 
     const endState = tasksReducer(
         startState,
-        changeTaskIsDoneAC(taskId1, todolistId1, false)
+        changeTaskIsDoneAC({
+            taskId: taskId1,
+            todolistId: todolistId1,
+            isDone: false,
+        })
     );
 
     expect(endState[todolistId1][0].isDone).toBeFalsy();
@@ -181,7 +189,10 @@ test("property with todolistId should be deleted", () => {
         ],
     };
 
-    const endState = tasksReducer(startState, removeTodolistAC(todolistId1));
+    const endState = tasksReducer(
+        startState,
+        removeTodolistAC({ id: todolistId1 })
+    );
     const keys = Object.keys(endState);
 
     expect(keys.length).toBe(1);
