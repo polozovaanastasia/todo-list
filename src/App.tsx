@@ -8,12 +8,6 @@ import {
     removeTodolistAC,
     updateTodolistAC,
 } from "./state/todolistsReducer/todolists-reducer";
-import {
-    addTaskAC,
-    changeTaskIsDoneAC,
-    removeTaskAC,
-    updateTaskTitleAC,
-} from "./state/taskReducer/tasks-reducer";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AppRootState } from "./state/store";
@@ -29,11 +23,11 @@ export type TasksStateType = {
     [key: string]: Array<TaskType>;
 };
 
-function AppWithRedux() {
+function App() {
     const dispatch = useDispatch();
-
-    const tasks = useSelector((state: AppRootState) => state.tasks);
-    const todolists = useSelector((state: AppRootState) => state.todolists);
+    const todolists = useSelector<AppRootState, Array<TodolistType>>(
+        (state) => state.todolists
+    );
 
     const addTodolist = (title: string) => {
         const action = addTodolistAC(title);
@@ -55,38 +49,6 @@ function AppWithRedux() {
         dispatch(action);
     };
 
-    const addTask = (title: string, todolistId: string) => {
-        const action = addTaskAC({ todolistId, title });
-        dispatch(action);
-    };
-
-    const removeTask = (taskId: string, todolistId: string) => {
-        const action = removeTaskAC({ taskId, todolistId });
-        dispatch(action);
-    };
-
-    const updateTaskTitle = (
-        newTaskTitle: string,
-        taskId: string,
-        todolistId: string
-    ) => {
-        const action = updateTaskTitleAC({
-            title: newTaskTitle,
-            todolistId,
-            taskId,
-        });
-        dispatch(action);
-    };
-
-    const changeTaskIsDone = (
-        taskId: string,
-        isDone: boolean,
-        todolistId: string
-    ) => {
-        const action = changeTaskIsDoneAC({ taskId, todolistId, isDone });
-        dispatch(action);
-    };
-
     return (
         <div className="app">
             <div className="app__todolist-creation">
@@ -98,32 +60,15 @@ function AppWithRedux() {
             </div>
             <div className="app__todolists-container">
                 {todolists.map((tl) => {
-                    let tasksForTodoList = tasks[tl.id];
-                    if (tl.filter === "active") {
-                        tasksForTodoList = tasks[tl.id].filter(
-                            (task: TaskType) => !task.isDone
-                        );
-                    }
-                    if (tl.filter === "done") {
-                        tasksForTodoList = tasks[tl.id].filter(
-                            (task: TaskType) => task.isDone
-                        );
-                    }
-
                     return (
                         <Todolist
                             id={tl.id}
                             key={tl.id}
                             title={tl.title}
-                            tasks={tasksForTodoList}
-                            removeTask={removeTask}
-                            addTask={addTask}
-                            changeFilter={changeFilter}
-                            changeTaskIsDone={changeTaskIsDone}
                             filter={tl.filter}
                             removeTodolist={removeTodolist}
-                            updateTaskTitle={updateTaskTitle}
                             updateTodolistTitle={updateTodolistTitle}
+                            changeFilter={changeFilter}
                         />
                     );
                 })}
@@ -132,4 +77,4 @@ function AppWithRedux() {
     );
 }
 
-export default AppWithRedux;
+export default App;

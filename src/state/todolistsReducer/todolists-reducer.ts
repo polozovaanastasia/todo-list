@@ -14,6 +14,7 @@ export const addTodolistAC = createAction(
     "ADD-TODOLIST",
     prepareAddTodolistPayload
 );
+
 export const removeTodolistAC = createAction<{
     id: string;
 }>("REMOVE-TODOLIST");

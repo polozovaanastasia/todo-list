@@ -11,6 +11,15 @@ import {
     SvgIcon,
 } from "@mui/material";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { AppRootState } from "../../state/store";
+import {
+    addTaskAC,
+    changeTaskIsDoneAC,
+    removeTaskAC,
+    updateTaskTitleAC,
+} from "../../state/taskReducer/tasks-reducer";
 
 export type TaskType = {
     id: string;
@@ -21,34 +30,35 @@ export type TaskType = {
 type PropsType = {
     id: string;
     title: string;
-    tasks: Array<TaskType>;
-    removeTask: (id: string, todolistId: string) => void;
-    addTask: (title: string, todolistId: string) => void;
-    changeFilter: (value: FilterValuesType, todolistId: string) => void;
-    changeTaskIsDone: (id: string, isDone: boolean, todolistId: string) => void;
     filter: FilterValuesType;
     removeTodolist: (todolistId: string) => void;
-    updateTaskTitle: (
-        taskTitle: string,
-        taskId: string,
-        todolistId: string
-    ) => void;
     updateTodolistTitle: (todolistTitle: string, todolistId: string) => void;
+    changeFilter: (filter: FilterValuesType, todolistId: string) => void;
 };
 
 function Todolist({
     id,
     title,
-    tasks,
-    removeTask,
-    addTask,
-    changeFilter,
-    changeTaskIsDone,
     filter,
     removeTodolist,
-    updateTaskTitle,
     updateTodolistTitle,
+    changeFilter,
 }: PropsType) {
+    const dispatch = useDispatch();
+
+    let tasks = useSelector<AppRootState, Array<TaskType>>(
+        (state) => state.tasks[id]
+    );
+
+    let allTodolistTasks = tasks;
+    let tasksForTodolist = allTodolistTasks;
+    if (filter === "active") {
+        tasksForTodolist = tasks.filter((task: TaskType) => !task.isDone);
+    }
+    if (filter === "done") {
+        tasksForTodolist = tasks.filter((task: TaskType) => task.isDone);
+    }
+
     const onAllClickHandler = () => changeFilter("all", id);
     const onActiveClickHandler = () => changeFilter("active", id);
     const onDoneClickHandler = () => changeFilter("done", id);
@@ -59,8 +69,9 @@ function Todolist({
         updateTodolistTitle(todolistTitle, id);
     };
 
-    const addTaskHandler = (title: string) => {
-        addTask(title, id);
+    const addTask = (taskTitle: string) => {
+        const action = addTaskAC({ todolistId: id, title: taskTitle });
+        dispatch(action);
     };
 
     const CheckBoxBlankIcon = () => (
@@ -110,26 +121,36 @@ function Todolist({
                     </h3>
 
                     <AddItemForm
-                        addItem={addTaskHandler}
+                        addItem={addTask}
                         errorMessage={ERROR_MESSAGES.EMPTY_TASK_TITLE}
                     />
                     <ul className="todolist__task-list">
-                        {tasks.map((task) => {
-                            const onRemoveTaskHandler = () =>
-                                removeTask(task.id, id);
-                            const onChangeIsDoneHandler = (
+                        {tasksForTodolist.map((task) => {
+                            const removeTask = () => {
+                                const action = removeTaskAC({
+                                    taskId: task.id,
+                                    todolistId: id,
+                                });
+                                dispatch(action);
+                            };
+                            const changeTaskIsDone = (
                                 e: React.ChangeEvent<HTMLInputElement>
-                            ) =>
-                                changeTaskIsDone(
-                                    task.id,
-                                    e.currentTarget.checked,
-                                    id
-                                );
-
-                            const onChangeTaskTitleHandler = (
-                                newTackTitle: string
                             ) => {
-                                updateTaskTitle(newTackTitle, task.id, id);
+                                const action = changeTaskIsDoneAC({
+                                    taskId: task.id,
+                                    todolistId: id,
+                                    isDone: e.currentTarget.checked,
+                                });
+                                dispatch(action);
+                            };
+
+                            const updateTaskTitle = (newTaskTitle: string) => {
+                                const action = updateTaskTitleAC({
+                                    title: newTaskTitle,
+                                    todolistId: id,
+                                    taskId: task.id,
+                                });
+                                dispatch(action);
                             };
                             return (
                                 <li
@@ -141,14 +162,14 @@ function Todolist({
                                     <Checkbox
                                         icon={<CheckBoxBlankIcon />}
                                         checked={task.isDone}
-                                        onChange={onChangeIsDoneHandler}
+                                        onChange={changeTaskIsDone}
                                         sx={{
                                             paddingLeft: 0,
                                         }}
                                     />
                                     <EditableSpan
                                         title={task.title}
-                                        onChange={onChangeTaskTitleHandler}
+                                        onChange={updateTaskTitle}
                                         errorMessage={
                                             ERROR_MESSAGES.EMPTY_TASK_TITLE
                                         }
@@ -157,7 +178,7 @@ function Todolist({
                                     <IconButton
                                         color="primary"
                                         aria-label="Delete"
-                                        onClick={onRemoveTaskHandler}
+                                        onClick={removeTask}
                                     >
                                         <DeleteOutlineIcon />
                                     </IconButton>
