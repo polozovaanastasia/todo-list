@@ -11,6 +11,7 @@ import {
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AppRootState } from "./state/store";
+import { useCallback } from "react";
 
 export type FilterValuesType = "all" | "active" | "done";
 export type TodolistType = {
@@ -24,30 +25,43 @@ export type TasksStateType = {
 };
 
 function App() {
+    console.log("App is called");
     const dispatch = useDispatch();
     const todolists = useSelector<AppRootState, Array<TodolistType>>(
         (state) => state.todolists
     );
 
-    const addTodolist = (title: string) => {
-        const action = addTodolistAC(title);
-        dispatch(action);
-    };
+    const addTodolist = useCallback(
+        (title: string) => {
+            const action = addTodolistAC(title);
+            dispatch(action);
+        },
+        [dispatch]
+    );
 
-    const removeTodolist = (id: string) => {
-        const action = removeTodolistAC({ id });
-        dispatch(action);
-    };
+    const removeTodolist = useCallback(
+        (id: string) => {
+            const action = removeTodolistAC({ id });
+            dispatch(action);
+        },
+        [dispatch]
+    );
 
-    const updateTodolistTitle = (id: string, title: string) => {
-        const action = updateTodolistAC({ id, title });
-        dispatch(action);
-    };
+    const updateTodolistTitle = useCallback(
+        (id: string, title: string) => {
+            const action = updateTodolistAC({ id, title });
+            dispatch(action);
+        },
+        [dispatch]
+    );
 
-    const changeFilter = (filter: FilterValuesType, id: string) => {
-        const action = changeTodolistFilterAC({ id, filter });
-        dispatch(action);
-    };
+    const changeFilter = useCallback(
+        (filter: FilterValuesType, id: string) => {
+            const action = changeTodolistFilterAC({ id, filter });
+            dispatch(action);
+        },
+        [dispatch]
+    );
 
     return (
         <div className="app">

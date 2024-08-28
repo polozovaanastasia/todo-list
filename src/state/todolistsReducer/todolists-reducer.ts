@@ -44,7 +44,6 @@ export const todolistsReducer = createReducer(initialState, (builder) => {
                 filter: "all",
             };
             state.push(newTodolist);
-            console.log(JSON.parse(JSON.stringify(state)));
         })
         .addCase(updateTodolistAC, (state, action) => {
             const { id, title } = action.payload;
@@ -52,6 +51,7 @@ export const todolistsReducer = createReducer(initialState, (builder) => {
             if (todolist) {
                 todolist.title = title;
             }
+            debugger;
         })
         .addCase(changeTodolistFilterAC, (state, action) => {
             const { id, filter } = action.payload;

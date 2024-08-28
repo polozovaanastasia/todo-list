@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { ErrorMessageValues } from "../../utils/errorMessages";
 import { Button, TextField } from "@mui/material";
 import Add from "@mui/icons-material/Add";
@@ -8,7 +8,8 @@ type AddItemFormPropsType = {
     errorMessage: ErrorMessageValues;
 };
 
-function AddItemForm({ addItem, errorMessage }: AddItemFormPropsType) {
+const AddItemForm = memo(({ addItem, errorMessage }: AddItemFormPropsType) => {
+    console.log("AddItemForm is called");
     let [title, setTitle] = useState("");
     let [error, setError] = useState<null | string>(null);
 
@@ -19,8 +20,10 @@ function AddItemForm({ addItem, errorMessage }: AddItemFormPropsType) {
     };
 
     const onKeyUpHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.ctrlKey && e.key === "Enter") {
+        if (error !== null) {
             setError(null);
+        }
+        if (e.ctrlKey && e.key === "Enter") {
             addHandler();
         }
     };
@@ -67,6 +70,6 @@ function AddItemForm({ addItem, errorMessage }: AddItemFormPropsType) {
             </Button>
         </div>
     );
-}
+});
 
 export default AddItemForm;
