@@ -61,7 +61,7 @@ const AddItemForm = memo(({ addItem, errorMessage }: AddItemFormPropsType) => {
                 }}
             />
             <Button
-                size="medium"
+                size="small"
                 variant="contained"
                 startIcon={<Add />}
                 onClick={addHandler}
