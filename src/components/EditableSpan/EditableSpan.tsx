@@ -25,7 +25,7 @@ const EditableSpan = memo(
                 return;
             }
             onChange(trimmedTitle);
-            setNewTitle(trimmedTitle);
+            setNewTitle(title);
             setEditMode(false);
         };
 
